@@ -8,7 +8,7 @@ import 'package:weather_animation/weather_animation.dart';
 class WeatherDisplay extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
-  const WeatherDisplay({Key? key, required this.weatherData}) : super(key: key);
+  const WeatherDisplay({super.key, required this.weatherData});
 
   @override
   Widget build(BuildContext context) {
