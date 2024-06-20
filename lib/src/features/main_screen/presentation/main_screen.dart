@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ts_5_6_2_api/data/weather_provider.dart';
 import 'package:ts_5_6_2_api/src/features/main_screen/presentation/paypal_webview.dart';
-import 'package:ts_5_6_2_api/src/features/main_screen/presentation/today_forecast.dart';
+import 'package:ts_5_6_2_api/src/features/main_screen/presentation/forecasts.dart';
 import 'package:ts_5_6_2_api/src/features/main_screen/presentation/weather_display.dart';
 
 class MainScreen extends StatefulWidget {
@@ -75,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              const TodayForecast(),
+              const Forecast(),
               const SizedBox(height: 20),
               SizedBox(
                 height: 70,

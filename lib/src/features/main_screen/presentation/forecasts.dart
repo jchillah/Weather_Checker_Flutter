@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:ts_5_6_2_api/data/weather_provider.dart';
 import 'package:ts_5_6_2_api/src/utils/weather_utils.dart';
 
-class TodayForecast extends StatelessWidget {
-  const TodayForecast({super.key});
+class Forecast extends StatelessWidget {
+  const Forecast({super.key});
 
   @override
   Widget build(BuildContext context) {
