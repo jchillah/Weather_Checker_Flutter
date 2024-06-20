@@ -1,19 +1,22 @@
+// File: lib/src/features/main_screen/presentation/widgets/weather_display.dart
 import 'package:flutter/material.dart';
 import 'package:ts_5_6_2_api/config/app_color.dart';
 import 'package:ts_5_6_2_api/src/utils/weather_scene_german.dart';
 import 'package:ts_5_6_2_api/src/utils/weather_utils.dart';
 import 'package:weather_animation/weather_animation.dart';
 
-class WeatherDataDisplay extends StatelessWidget {
+class WeatherDisplay extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
-  const WeatherDataDisplay({required this.weatherData, super.key});
+  const WeatherDisplay({Key? key, required this.weatherData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final String iconCode = weatherData['weather'][0]['icon'] ?? '';
     final String weatherDescription =
         weatherData['weather'][0]['description'] ?? '';
+    final WeatherScene currentWeatherScene =
+        getWeatherSceneGerman(weatherDescription);
 
     return Container(
       decoration: BoxDecoration(
@@ -25,7 +28,7 @@ class WeatherDataDisplay extends StatelessWidget {
       child: Stack(
         children: [
           WeatherSceneWidget(
-            weatherScene: getWeatherSceneGerman(weatherDescription),
+            weatherScene: currentWeatherScene,
           ),
           Positioned(
             top: 250,
@@ -56,35 +59,51 @@ class WeatherDataDisplay extends StatelessWidget {
               children: [
                 Text(
                   'Temperature: ${weatherData['main']['temp']}°C',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
                 Text(
                   'Weather: $weatherDescription',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
                 Text(
                   'Humidity: ${weatherData['main']['humidity']}%',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
                 Text(
                   'Wind Speed: ${weatherData['wind']['speed']} m/s',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
                 Text(
                   'Wind Degree: ${weatherData['wind']['deg']} degrees',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
                 Text(
                   'Pressure: ${weatherData['main']['pressure']} hPa',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
                 Text(
                   'Sunrise: ${convertTimestampToTime(weatherData['sys']['sunrise'])}',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
                 Text(
                   'Sunset: ${convertTimestampToTime(weatherData['sys']['sunset'])}',
-                  style: const TextStyle(color: AppColors.textcolor),
+                  style: const TextStyle(
+                    color: AppColors.textcolor,
+                  ),
                 ),
               ],
             ),

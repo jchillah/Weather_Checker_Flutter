@@ -1,13 +1,10 @@
+// File: lib/src/features/main_screen/presentation/main_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ts_5_6_2_api/data/weather_provider.dart';
 import 'package:ts_5_6_2_api/src/features/main_screen/presentation/paypal_webview.dart';
-import 'package:ts_5_6_2_api/src/services/weather_service.dart';
-import 'package:weather_animation/weather_animation.dart';
-
-import 'city_input.dart';
-import 'forecast_data_display.dart';
-import 'weather_data_display.dart';
+import 'package:ts_5_6_2_api/src/features/main_screen/presentation/weather_display.dart';
+import 'package:ts_5_6_2_api/src/utils/weather_utils.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -19,13 +16,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final String donateUrl =
       'https://www.paypal.com/donate/?hosted_button_id=ZJX2ASN852J6W';
-  final WeatherService weatherService = WeatherService();
   final TextEditingController _cityController = TextEditingController();
-
-  Future<Map<String, dynamic>>? _weatherFuture;
-  Future<List<dynamic>>? _forecastFuture;
-  // ignore: unused_field
-  WeatherScene? _currentWeatherScene;
 
   void _getWeather() {
     final weatherProvider =
@@ -46,48 +37,97 @@ class _MainScreenState extends State<MainScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              CityInput(
-                  controller: _cityController, onFetchWeather: _getWeather),
+              TextField(
+                controller: _cityController,
+                decoration: const InputDecoration(
+                  labelText: 'City',
+                  border: OutlineInputBorder(),
+                ),
+              ),
               const SizedBox(height: 20),
-              _weatherFuture == null
-                  ? Container()
-                  : FutureBuilder<Map<String, dynamic>>(
-                      future: _weatherFuture!,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text(snapshot.error.toString(),
-                              style: const TextStyle(color: Colors.red));
-                        } else if (snapshot.hasData) {
-                          return WeatherDataDisplay(
-                              weatherData: snapshot.data!);
-                        } else {
-                          return const Text('No data available');
-                        }
-                      },
-                    ),
+              ElevatedButton(
+                onPressed: _getWeather,
+                child: const Text('Weather Please!'),
+              ),
               const SizedBox(height: 20),
-              _forecastFuture == null
-                  ? Container()
-                  : FutureBuilder<List<dynamic>>(
-                      future: _forecastFuture!,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text(snapshot.error.toString(),
-                              style: const TextStyle(color: Colors.red));
-                        } else if (snapshot.hasData) {
-                          return ForecastDataDisplay(
-                              forecastData: snapshot.data!);
-                        } else {
-                          return const Text('No data available');
-                        }
-                      },
-                    ),
+              Consumer<WeatherProvider>(
+                builder: (context, weatherProvider, child) {
+                  if (weatherProvider.weatherData == null) {
+                    return Container();
+                  }
+                  return FutureBuilder<Map<String, dynamic>>(
+                    future: weatherProvider.weatherData!,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text(
+                          snapshot.error.toString(),
+                          style: const TextStyle(color: Colors.red),
+                        );
+                      } else if (snapshot.hasData) {
+                        return WeatherDisplay(weatherData: snapshot.data!);
+                      } else {
+                        return const Text('No data available');
+                      }
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              Consumer<WeatherProvider>(
+                builder: (context, weatherProvider, child) {
+                  if (weatherProvider.forecastData == null) {
+                    return Container();
+                  }
+                  return FutureBuilder<List<dynamic>>(
+                    future: weatherProvider.forecastData!,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text(
+                          snapshot.error.toString(),
+                          style: const TextStyle(color: Colors.red),
+                        );
+                      } else if (snapshot.hasData) {
+                        final forecastData = snapshot.data!;
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: forecastData.length,
+                          itemBuilder: (context, index) {
+                            if (index % 8 != 0) {
+                              return Container();
+                            }
+
+                            final forecast = forecastData[index];
+                            final String date =
+                                convertTimestampToDate(forecast['dt']);
+                            final String iconCode =
+                                forecast['weather'][0]['icon'] ?? '';
+                            final String description =
+                                forecast['weather'][0]['description'] ?? '';
+                            final dynamic temp = forecast['main']['temp'];
+
+                            return ListTile(
+                              leading: Image.network(
+                                getWeatherIconUrl(iconCode),
+                                width: 50,
+                                height: 50,
+                              ),
+                              title: Text(date),
+                              subtitle: Text(description),
+                              trailing: Text('${temp.toStringAsFixed(1)}°C'),
+                            );
+                          },
+                        );
+                      } else {
+                        return const Text('No data available');
+                      }
+                    },
+                  );
+                },
+              ),
               const SizedBox(height: 20),
               SizedBox(
                 height: 70,
@@ -97,7 +137,8 @@ class _MainScreenState extends State<MainScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PayPalWebView(url: donateUrl)),
+                        builder: (context) => PayPalWebView(url: donateUrl),
+                      ),
                     );
                   },
                   child: const Text('Donate via PayPal'),
