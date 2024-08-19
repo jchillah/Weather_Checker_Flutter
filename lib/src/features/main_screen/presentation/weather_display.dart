@@ -1,4 +1,3 @@
-// File: lib/src/features/main_screen/presentation/widgets/weather_display.dart
 import 'package:flutter/material.dart';
 import 'package:ts_5_6_2_api/config/app_color.dart';
 import 'package:ts_5_6_2_api/src/utils/weather_scene_german.dart';
