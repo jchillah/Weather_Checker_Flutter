@@ -1,60 +1,72 @@
 # weather_checker
 
-This is a simple Weather App built with Flutter. It fetches current weather data and a forecast using an API.
+A Flutter weather application that fetches real-time weather data and forecasts using an API.
 
 ## Features
-- Get current weather information for any city.
-- Fetch a 5-day weather forecast.
-- Responsive UI with provider-based state management.
+- Fetches current weather data for a given city
+- Retrieves a multi-day weather forecast
+- Uses `provider` for state management
+- Displays weather animations and icons
+- Custom styling with `google_fonts` and `flex_color_scheme`
+- `.env` file support for API key security
 
-## Requirements
-- Flutter SDK installed
-- Dart installed
-- API key from OpenWeatherMap (or another weather provider)
+## Setup Instructions
 
-## Installation
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/weather-app.git
-   cd weather-app
-   ```
-2. Install dependencies:
-   ```sh
-   flutter pub get
-   ```
-3. Create a `.env` file in the root directory and add your API key:
-   ```env
-   API_KEY=your_api_key_here
-   ```
-
-## Usage
-1. Run the app in debug mode:
-   ```sh
-   flutter run
-   ```
-2. Enter a city name to fetch weather data.
-
-## Project Structure
-```
-lib/
-│-- main.dart
-│-- providers/
-│   ├── weather_provider.dart
-│-- services/
-│   ├── weather_service.dart
-│-- models/
-│   ├── weather_model.dart
-│-- views/
-│   ├── home_screen.dart
+### Prerequisites
+Ensure you have Flutter installed. You can check by running:
+```sh
+flutter --version
 ```
 
-## API Integration
-The app uses `WeatherService` to fetch data from the weather API. Make sure to provide a valid API key in the `.env` file.
+### Clone the Repository
+```sh
+git clone https://github.com/YOUR_USERNAME/ts_5_6_2_api.git
+cd ts_5_6_2_api
+```
 
-## Contributing
-Feel free to fork the repository and submit a pull request.
+### Install Dependencies
+```sh
+flutter pub get
+```
+
+### Configure API Key
+Create a `.env` file in the root directory and add your API key:
+```sh
+touch .env
+```
+Inside `.env`, add the following:
+```env
+API_KEY=your_api_key_here
+```
+
+### Run the App
+```sh
+flutter run
+```
+
+## Dependencies
+This project uses the following Flutter packages:
+
+| Package            | Version  |
+|--------------------|----------|
+| flutter           | latest   |
+| cupertino_icons   | ^1.0.6   |
+| http              | ^1.2.1   |
+| webview_flutter   | ^4.8.0   |
+| flex_color_scheme | ^7.3.1   |
+| google_fonts      | ^6.2.1   |
+| provider          | ^6.1.2   |
+| flutter_dotenv    | ^5.1.0   |
+| intl              | ^0.19.0  |
+| weather_icons     | ^3.0.0   |
+| weather_animation | ^1.0.1   |
 
 ## License
 This project is licensed under the MIT License.
 
+## Contributing
+Feel free to fork the repository and submit a pull request with improvements!
+
+---
+Happy coding! 🚀
 
